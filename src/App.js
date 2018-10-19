@@ -7,25 +7,43 @@ import BookShelf from './BookShelf';
 
 class BooksApp extends Component {
   state = {
-    books: []
+	currentlyReading: [],
+	wantToRead: [],
+	read: []
   }
 
   componentDidMount() {
     BooksAPI.getAll()
       .then((books) => this.setState({
-        books: books
+		allBooks: books,
+		currentlyReading: books.filter(book => book.shelf === 'currentlyReading'),
+		wantToRead: books.filter(book => book.shelf === 'wantToRead'),
+		read: books.filter(book => book.shelf === 'read')
       }));
   }
+/**
+* @description This function handles when the user changes a book from a shelf to another, calling the API and rearranging
+*			   the books to it's current shelf
+* @param {object} book - The book that the user wants to change shelf
+* @param {string} shelf - The new shelf that the user wants to put the book ('currentlyReading', 'wantToRead', 'Read', 'None')
+*/
+  handleShelfChange = (book, shelf) => {
+    BooksAPI.update(book, shelf)
+      .then((shelves) => this.setState((prevState) => ({
+		  currentlyReading: prevState.allBooks.filter(book => shelves.currentlyReading.includes(book.id)),
+		  wantToRead: prevState.allBooks.filter(book => shelves.wantToRead.includes(book.id)),
+		  read: prevState.allBooks.filter(book => shelves.read.includes(book.id))
+	  })));
+  }
   render() {
-    const { books } = this.state;
     const shelves = [{
-      shelf: 'currentlyReading',
+      type: 'currentlyReading',
       title: 'Currently Reading'
     }, {
-      shelf:'wantToRead',
-      title: 'Want To Read' 
+      type:'wantToRead',
+	  title:'Want To Read' 
     }, {
-      shelf: 'read',
+      type: 'read',
       title: 'Read'}
     ];
 
@@ -62,8 +80,8 @@ class BooksApp extends Component {
 					</div>
 					<div className="list-books-content">
 						<div>
-							{shelves.map(shelf => (
-								<BookShelf shelf={shelf.shelf} books={books} title={shelf.title} />
+							{shelves.map((shelf) => (
+								<BookShelf key={shelf.type} shelf={shelf} books={this.state[`${shelf.type}`]} handleShelfChange={this.handleShelfChange} />
 							))}
 						</div>
 					</div>

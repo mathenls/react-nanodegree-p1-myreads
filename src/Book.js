@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import RatingComponent from './Rating';
 
 class Book extends Component {
     static propTypes = {
-		shelf: PropTypes.object.isRequired
-	}
+        handleShelfChange: PropTypes.func.isRequired
+    }
+    handleChange = (book, event) => {
+        const { value } = event.target;
+        event.preventDefault();
+        this.props.handleShelfChange(book, value);
+    }
     render() {
     const { book } = this.props;
         return (  
@@ -13,21 +19,26 @@ class Book extends Component {
                 <div className="book-top">
                     <div className="book-cover" title={book.title} style={{ width: 128, height: 188, backgroundImage: `url(${book.imageLinks.smallThumbnail})`}}></div>
                     <div className="book-shelf-changer">
-                    <select>
-                        <option value="move" disabled>Move to...</option>
-                        <option value="currentlyReading">Currently Reading</option>
-                        <option value="wantToRead">Want to Read</option>
-                        <option value="read">Read</option>
-                        <option value="none">None</option>
-                    </select>
+                        <select value={book.shelf} onChange={(event) => this.handleChange(book, event)}>
+                            <option value="move" disabled>Move to...</option>
+                            <option value="currentlyReading">Currently Reading</option>
+                            <option value="wantToRead">Want to Read</option>
+                            <option value="read">Read</option>
+                            <option value="none">None</option>
+                        </select>
                     </div>
                 </div>
-                <div className="book-title">{ book.title }</div>
+                <div className="book-title">{book.title}</div>
                 <div className="book-authors">
                     {book.authors.map((author) => (
-                        <span>{ author }</span>
+                        <span key={author}>{author}</span>
                     ))}
                 </div>
+                {book.averageRating ? (
+                    <RatingComponent averageRating={book.averageRating} ratingsCount={book.ratingsCount} />
+                ) : (
+                    <span className="rating-label"> No ratings yet</span>
+                )}
             </div>
         </li>
       )

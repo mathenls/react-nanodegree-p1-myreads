@@ -132,6 +132,9 @@ body, .app {
 .book-authors {
   color: #999;
 }
+.book-authors span{
+  display: inline-block;
+}
 
 .book-top {
   position: relative;
@@ -171,4 +174,20 @@ body, .app {
   padding: 20px 10px 0;
   text-align: center;
   font-size: 0.8em;
+}
+
+/* rating */
+.rating-label {
+  font-size: 0.9em;
+  color: #999;
+}
+.rating-stars {
+  margin-top: 2px;
+  color: #FDD835;
+}
+
+/* icons */
+
+.fa {
+  font-size: 1.2em !important; 
 }
