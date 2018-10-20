@@ -5,6 +5,34 @@ import RatingComponent from './Rating';
 import Checkbox from '@material-ui/core/Checkbox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Typography from '@material-ui/core/Typography';
+
+const styles = theme => ({
+    card: {
+      display: 'flex',
+      minWidth: 125,
+      minHeight: 360
+    },
+    details: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    content: {
+      flex: '1 0 auto',
+      padding: 12,
+      position: 'relative',
+      minWidth: 210
+    },
+    cover: {
+      minWidth: 130,
+      minHeight: 200,
+      backgroundSize: 'contain'
+    },
+});
 
 class Book extends Component {
     state = {
@@ -22,38 +50,48 @@ class Book extends Component {
         });
     }
     render() {
-        const { book, shelves, shelf, handleShelfChange } = this.props;
+        const { book, shelves, shelf, handleShelfChange, classes } = this.props;
         const { checked } = this.state;
 
         return (  
             <li>
                 <div className="book">
-                    <div className="book-top">
-                        <Checkbox 
-                            checked={checked} 
-                            style={{position: "absolute", right: "-14px", top: "-14px", color: "#00c853"}}
-                            icon={<CheckBoxOutlineBlankIcon fontSize="large" />}
-                            checkedIcon={<CheckBoxIcon fontSize="large" />} 
-                            onChange={() => this.handleBookCheckedChange(book)}
-                        />
-                        <div className="book-cover" title={book.title} style={{ width: 128, height: 188, backgroundImage: `url(${book.imageLinks.smallThumbnail})`}}></div>
-                        <BookShelfSelector book={book} shelves={shelves} shelf={shelf} handleShelfChange={handleShelfChange} cssClass="book-shelf-changer"/>
-                    </div>
-                    <div className="book-title">{book.title}</div>
-                    <div className="book-authors">
-                        {book.authors.map((author) => (
-                            <span key={author}>{author}</span>
-                        ))}
-                    </div>
-                    {book.averageRating ? (
-                        <RatingComponent averageRating={book.averageRating} ratingsCount={book.ratingsCount} />
-                    ) : (
-                        <span className="rating-label"> No ratings yet</span>
-                    )}
+                    <Card className={classes.card}>
+                        <div className={classes.details}>
+                            <CardMedia
+                                className={classes.cover}
+                                image={book.imageLinks.smallThumbnail}
+                                title={book.title}
+                            />
+                            <CardContent className={classes.content}>
+                                <Typography component="h6" variant="h6">
+                                    {book.title}
+                                    <Checkbox 
+                                        checked={checked} 
+                                        style={{margin: 4, padding: 0}}
+                                        icon={<CheckBoxOutlineBlankIcon fontSize="medium" />}
+                                        checkedIcon={<CheckBoxIcon fontSize="medium" />} 
+                                        onChange={() => this.handleBookCheckedChange(book)}
+                                    />
+                                </Typography>
+                                {book.authors.map((author) => (
+                                    <Typography component="subtitle2" color="textSecondary" className>
+                                        {author}
+                                    </Typography>
+                                ))}
+                                {book.averageRating ? (
+                                    <RatingComponent averageRating={book.averageRating} ratingsCount={book.ratingsCount} />
+                                ) : (
+                                    <span className="rating-label"> No ratings yet</span>
+                                )}
+                                <BookShelfSelector book={book} shelves={shelves} shelf={shelf} handleShelfChange={handleShelfChange} cssClass="book-shelf-changer-multiple"/>
+                            </CardContent>
+                        </div>
+                    </Card>
                 </div>
             </li>
         )
     }
 }
 
-export default Book
+export default withStyles(styles, { withTheme: true })(Book);

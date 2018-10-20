@@ -15,16 +15,16 @@ const styles = theme => ({
 		width: '100%',
 	},
 	heading: {
-		fontSize: theme.typography.pxToRem(24),
+		fontSize: theme.typography.pxToRem(20),
 		flexBasis: '33.33%',
 		flexShrink: 0
 	},
 	secondaryHeading: {
-		fontSize: theme.typography.pxToRem(18),
+		fontSize: theme.typography.pxToRem(16),
 		color: theme.palette.text.secondary
 	},
 	expansionPanel: {
-		margin: '12px'
+		margin: '9px'
 	},
 	typography: {
 		useNextVariants: true
@@ -48,21 +48,20 @@ class BookShelf extends Component {
             <div>
 				<ExpansionPanel defaultExpanded={true} disabled={books.length === 0} className={classes.expansionPanel}>
 					<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-						<Typography className={classes.heading}>{shelf.title}</Typography>
-						<Typography className={classes.secondaryHeading}>{books.length ? `${books.length} books` : 'No books in this shelf'}</Typography>
+						<Typography className={classes.heading}>{`${shelf.title} (${books.length} ${books.length > 1 ? ` books` : ` book`})`}</Typography>
 					</ExpansionPanelSummary>
 					<ExpansionPanelDetails className={classes.expansionPanel}>
 						<div className="bookshelf">
 							{checkedBooks.length > 0 && (
-								<div>
-									<span className="bookshelf-selected-books"> {checkedBooks.length} selected books.</span>
+								<div className="bookshelf-selected-books">
+									<span> {checkedBooks.length} selected books.</span>
 									<BookShelfSelector 
 										books={checkedBooks} 
 										shelves={shelves} 
 										shelf={shelf} 
 										handleShelfChange={onShelfChange} 
 										handleShelfMultipleChange={onShelfMultipleChange} 
-										cssClass="book-shelf-changer-multiple"
+										cssClass="book-shelf-changer"
 									/>
 								</div>
 							)}
