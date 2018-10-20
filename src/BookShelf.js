@@ -49,7 +49,7 @@ class BookShelf extends Component {
             <div>
 				<ExpansionPanel defaultExpanded={true} disabled={books.length === 0} className={classes.expansionPanel}>
 					<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-						<Typography className={classes.heading}>{`${shelf.title} (${books.length} ${books.length > 1 ? ` books` : ` book`})`}</Typography>
+						<Typography className={classes.heading}>{`${shelf.title} (${books.length} ${books.length !== 1 ? ` books` : ` book`})`}</Typography>
 					</ExpansionPanelSummary>
 					<ExpansionPanelDetails className={classes.expansionPanel}>
 						<div className="bookshelf">
