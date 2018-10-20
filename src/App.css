@@ -5,7 +5,7 @@ body {
   line-height: 1.5;
 }
 body, .app {
-  background: white;
+  background: #F0F0F0;
 }
 
 /* main page */
@@ -42,6 +42,13 @@ body, .app {
 .bookshelf-books {
   text-align: center;
 }
+
+.bookshelf-selected-books {
+  font-size: 1.1em;
+  color: #999;
+  margin: 8px;
+}
+
 
 .open-search {
   position: fixed;
@@ -164,6 +171,27 @@ body, .app {
   cursor: pointer;
 }
 
+.book-shelf-changer-multiple {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #60ac5d;
+  background-image: url('./icons/arrow-drop-down.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+.book-shelf-changer-multiple select {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+
 /* book cover */
 
 .book-cover {
@@ -190,4 +218,12 @@ body, .app {
 
 .fa {
   font-size: 1.2em !important; 
+}
+
+/* progress */ 
+.progress {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
 }
