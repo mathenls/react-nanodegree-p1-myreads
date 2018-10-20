@@ -217,6 +217,11 @@ body, .app {
   color: #FDD835;
 }
 
+.rating-stars-rated {
+  margin-top: 2px;
+  color: #29b6f6;
+}
+
 /* icons */
 
 .fa {

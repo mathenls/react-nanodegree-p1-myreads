@@ -3,6 +3,7 @@ import * as BooksAPI from './BooksAPI';
 import './App.css';
 import { Route } from 'react-router-dom';
 import BookShelf from './BookShelf';
+import SearchBar from './SearchBar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
@@ -17,7 +18,13 @@ class BooksApp extends Component {
 	componentDidMount() {
 		BooksAPI.getAll()
 			.then((books) => {
-				books = books.map(book => ({...book, checked: false}));
+				books = books.map((book) => {
+						const rating = localStorage.getItem(book.id);
+						return  rating 
+								? {...book, checked: false, rating: localStorage.getItem(book.id)} 
+								: {...book, checked: false};
+					}
+				);
 				this.setState({
 					allBooks: books,
 					currentlyReading: books.filter(book => book.shelf === 'currentlyReading'),
@@ -63,7 +70,9 @@ class BooksApp extends Component {
 			loading: false
 		});
 	}
-
+	handleBookRated =  (book, rating) => {
+		localStorage.setItem(book.id, rating);
+	}
 	handleBookCheckedState = (book) => {
 		this.setState((prevState) => ({
 			allBooks: prevState.allBooks.map(searchedBook => {
@@ -93,20 +102,7 @@ class BooksApp extends Component {
 				<div>
 					<Route exact path='/search' render={({ history  }) => (
 						<div className="search-books">
-							<div className="search-books-bar">
-								<a className="close-search" onClick={() => history.push('/')}>Close</a>
-								<div className="search-books-input-wrapper">
-								{/*
-									NOTES: The search from BooksAPI is limited to a particular set of search terms.
-									You can find these search terms here:
-									https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-		
-									However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-									you don't find a specific author or title. Every search is limited by search terms.
-								*/}
-									<input type="text" placeholder="Search by title or author"/>
-								</div>
-							</div>
+							<SearchBar />
 							<div className="search-books-results">
 								<ol className="books-grid"></ol>
 							</div>
@@ -134,7 +130,8 @@ class BooksApp extends Component {
 													books={this.state[`${shelf.type}`]} 
 													onShelfChange={this.handleShelfChange}
 													onShelfMultipleChange={this.handleShelfMultipleChange}
-													onBookCheckedChange={this.handleBookCheckedState} 
+													onBookCheckedChange={this.handleBookCheckedState}
+													onBookRated={this.handleBookRated} 
 												/>
 											))}
 										</div>

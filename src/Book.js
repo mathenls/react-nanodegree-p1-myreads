@@ -40,7 +40,8 @@ class Book extends Component {
     }
     static propTypes = {
         handleShelfChange: PropTypes.func.isRequired,
-        onBookCheckedChange: PropTypes.func.isRequired
+        onBookCheckedChange: PropTypes.func.isRequired,
+        onBookRated: PropTypes.func.isRequired
     }
     handleBookCheckedChange = (book) => {
         this.setState((currentState) => ({
@@ -50,7 +51,7 @@ class Book extends Component {
         });
     }
     render() {
-        const { book, shelves, shelf, handleShelfChange, classes } = this.props;
+        const { book, shelves, shelf, handleShelfChange, onBookRated, classes } = this.props;
         const { checked } = this.state;
 
         return (  
@@ -64,27 +65,32 @@ class Book extends Component {
                                 title={book.title}
                             />
                             <CardContent className={classes.content}>
-                                <Typography component="h6" variant="h6">
+                                <Typography variant="h6">
                                     {book.title}
                                     <Checkbox 
                                         checked={checked} 
                                         style={{margin: 4, padding: 0}}
-                                        icon={<CheckBoxOutlineBlankIcon fontSize="medium" />}
-                                        checkedIcon={<CheckBoxIcon fontSize="medium" />} 
+                                        icon={<CheckBoxOutlineBlankIcon fontSize="default" />}
+                                        checkedIcon={<CheckBoxIcon fontSize="default" />} 
                                         onChange={() => this.handleBookCheckedChange(book)}
                                     />
                                 </Typography>
                                 {book.authors.map((author) => (
-                                    <Typography component="subtitle2" color="textSecondary" className>
+                                    <Typography key={author} variant="subtitle2" color="textSecondary">
                                         {author}
                                     </Typography>
                                 ))}
-                                {book.averageRating ? (
-                                    <RatingComponent averageRating={book.averageRating} ratingsCount={book.ratingsCount} />
-                                ) : (
-                                    <span className="rating-label"> No ratings yet</span>
-                                )}
-                                <BookShelfSelector book={book} shelves={shelves} shelf={shelf} handleShelfChange={handleShelfChange} cssClass="book-shelf-changer-multiple"/>
+                                <RatingComponent 
+                                    book={book} 
+                                    onBookRated={onBookRated} 
+                                />
+                                <BookShelfSelector 
+                                    book={book} 
+                                    shelves={shelves} 
+                                    shelf={shelf} 
+                                    handleShelfChange={handleShelfChange} 
+                                    cssClass="book-shelf-changer-multiple"
+                                />
                             </CardContent>
                         </div>
                     </Card>

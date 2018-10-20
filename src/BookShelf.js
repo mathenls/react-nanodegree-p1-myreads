@@ -38,10 +38,11 @@ class BookShelf extends Component {
 		onShelfChange: PropTypes.func.isRequired,
 		onShelfMultipleChange: PropTypes.func.isRequired,
 		classes: PropTypes.object.isRequired,
-		onBookCheckedChange: PropTypes.func.isRequired
+		onBookCheckedChange: PropTypes.func.isRequired,
+		onBookRated: PropTypes.func.isRequired
 	}
     render() {
-		const { shelves, shelf, books, onShelfChange, onShelfMultipleChange, classes, onBookCheckedChange } = this.props;
+		const { shelves, shelf, books, onShelfChange, onShelfMultipleChange, classes, onBookCheckedChange, onBookRated } = this.props;
 		const checkedBooks = books.filter(book => book.checked);
 
         return (
@@ -75,6 +76,7 @@ class BookShelf extends Component {
 											book={book} 
 											handleShelfChange={onShelfChange}
 											onBookCheckedChange={onBookCheckedChange}
+											onBookRated={onBookRated}
 										/>
 									))}
 								</ol>
