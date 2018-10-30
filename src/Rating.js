@@ -1,24 +1,32 @@
 import React, { Component } from 'react';
 import Rating from 'react-rating';
 import PropTypes from 'prop-types';
+import Typography from '@material-ui/core/Typography';
 
 class RatingComponent extends Component {
     state = {
         rating: this.props.book.rating || this.props.book.averageRating || 0,
         averageRating: this.props.book.averageRating || 0,
-        ratingsCount: this.props.book.ratingsCount || 0,
-        rated: this.props.book.rating > 0 || false,
+        ratingsCount: this.props.book.ratingsCount || this.props.book.rating ? 1 : 0,
+        rated: this.props.book.rating || false,
         yourRating: this.props.book.rating || 0
     }
     handleChange = (value) => {
-        this.setState((currentState) => ({
-            rating: (((currentState.ratingsCount * currentState.averageRating) + value) / (currentState.rated ? currentState.ratingsCount : currentState.ratingsCount + 1)).toFixed(1),
-            averageRating: (((currentState.ratingsCount * currentState.averageRating) + value) / (currentState.rated ? currentState.ratingsCount : currentState.ratingsCount + 1)).toFixed(1),
-            ratingsCount: currentState.rated ? currentState.ratingsCount : currentState.ratingsCount + 1,
-            rated: true,
-            hovered: true,
-            yourRating: value
-        }));
+        this.setState((currentState) => {
+            const { averageRating, ratingsCount, rated } = currentState;
+            const average = ratingsCount === 0
+                            ? value.toFixed(1)
+                            : (((averageRating * ratingsCount) + value) / (ratingsCount + 1)).toFixed(1)
+
+            return ({
+                rating: average,
+                averageRating: average,
+                ratingsCount: !rated ? ratingsCount + 1 : ratingsCount || 1,
+                rated: true,
+                hovered: true,
+                yourRating: value
+            })
+        });
         this.props.onBookRated(this.props.book, value)
     }
     handleHover = (value) => {
@@ -35,22 +43,24 @@ class RatingComponent extends Component {
 
         return (
             <div>
-                <span className="rating-label">
-                    <b>{!rated && ('Rate The Book')}</b><br/>
-                    <b>{`${rating}/5`}</b> 
-                    {hovered ? ' (Your rating)' : ` (${ratingsCount})`}
-                </span>
-                <div className={hovered ? 'rating-stars-rated' : 'rating-stars'}>    
+                <div className={hovered ? 'rating-stars-rated' : 'rating-stars'}>
+                    <Typography variant="body1" color="textSecondary">
+                        {rating}
+                        {hovered ? ' (Your rating)' : ` (${ratingsCount})`}
+                    </Typography>
                     <Rating
                         emptySymbol="fa fa-star-o fa-2x"
                         fullSymbol="fa fa-star fa-2x"
                         onChange={(value) => {this.handleChange(value)}}
                         fractions={2}
-                        initialRating={rating}
+                        initialRating={parseFloat(rating)}
                         onHover={(value) => {this.handleHover(value)}}
                         quiet={!hovered}
-                    />   
+                    />
                 </div>
+                <span className="rating-label">
+                    <b>{!rated && ('Rate The Book')}</b>
+                </span>
             </div>
         )
     }

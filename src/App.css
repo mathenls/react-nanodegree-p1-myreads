@@ -40,7 +40,7 @@ body, .app {
   border-bottom: 1px solid #dedede;
 }
 .bookshelf-books {
-  text-align: center !important;
+  text-align: left !important;
 }
 
 .bookshelf-selected-books {
@@ -107,18 +107,17 @@ body, .app {
 }
 
 .search-books-results {
-  padding: 80px 10px 20px;
+  padding: 20px 10px 20px;
 }
 
 /* books grid */
-
 .books-grid {
   list-style-type: none;
   padding: 0;
   margin: 0;
 
   display: flex;
-  justify-content: center;
+  justify-content: left;
   flex-wrap: wrap;
 }
 .books-grid li {
@@ -133,7 +132,11 @@ body, .app {
   font-size: 0.8em;
 }
 .book-title {
-  margin-top: 10px;
+  margin-top: 4px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 .book-authors {
   color: #999;
@@ -152,15 +155,15 @@ body, .app {
 .book-shelf-changer {
   position: relative;
   display: inline-block;
-  width: 42px;
-  height: 42px;
-  margin-left: 8px;
+  width: 32px;
+  height: 32px;
+  margin: 0px 0px 0px 8px;
   border-radius: 50%;
   background: #0036FF;
   background-image: url('./icons/arrow-drop-down.svg');
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 36px;
+  background-size: 24px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 .book-shelf-changer select {
@@ -184,7 +187,6 @@ body, .app {
   background-position: center;
   background-size: 28px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-  z-index: 999 !important;
 }
 .book-shelf-changer-multiple select {
   width: 100%;
@@ -202,7 +204,7 @@ body, .app {
 }
 .book-cover-title {
   padding: 20px 10px 0;
-  text-align: center;
+  text-align: left;
   font-size: 0.8em;
 }
 
@@ -213,25 +215,28 @@ body, .app {
   display: block;
 }
 .rating-stars {
-  margin-top: 2px;
+  margin: 2px 0px 0px 0px;
   color: #FDD835;
 }
 
 .rating-stars-rated {
-  margin-top: 2px;
+  margin: 2px 0px 0px 0px;
   color: #29b6f6;
 }
 
 /* icons */
 
 .fa {
-  font-size: 1.0em !important; 
+  font-size: 1.0em !important;
 }
 
-/* progress */ 
-.progress {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+/* progress & error */
+.progress,
+.error {
+  position: relative;
+  top: 40vh;
+  left: 45vw;
+
   z-index: 10;
 }
+

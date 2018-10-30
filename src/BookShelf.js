@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Book from './Book';
 import BookShelfSelector from './BookShelfSelector';
-
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -24,12 +23,14 @@ const styles = theme => ({
 		color: theme.palette.text.secondary
 	},
 	expansionPanel: {
-		margin: '9px'
+		margin: '9px',
+		backgroundColor: ''
 	},
 	typography: {
 		useNextVariants: true
 	},
 });
+
 class BookShelf extends Component {
 	static propTypes = {
 		shelves: PropTypes.array.isRequired,
@@ -39,51 +40,58 @@ class BookShelf extends Component {
 		onShelfMultipleChange: PropTypes.func.isRequired,
 		classes: PropTypes.object.isRequired,
 		onBookCheckedChange: PropTypes.func.isRequired,
-		onBookRated: PropTypes.func.isRequired
+		onBookRated: PropTypes.func.isRequired,
+		isSearchPage: PropTypes.bool.isRequired
 	}
     render() {
-		const { shelves, shelf, books, onShelfChange, onShelfMultipleChange, classes, onBookCheckedChange, onBookRated } = this.props;
+		const { shelves, shelf, books, onShelfChange,onShelfMultipleChange,
+				classes, onBookCheckedChange, onBookRated, isSearchPage } = this.props;
 		const checkedBooks = books.filter(book => book.checked);
 
         return (
             <div>
-				<ExpansionPanel defaultExpanded={true} disabled={books.length === 0} className={classes.expansionPanel}>
-					<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-						<Typography className={classes.heading}>{`${shelf.title} (${books.length} ${books.length !== 1 ? ` books` : ` book`})`}</Typography>
-					</ExpansionPanelSummary>
-					<ExpansionPanelDetails className={classes.expansionPanel}>
-						<div className="bookshelf">
+				{(!isSearchPage || books.length > 0) && (
+					<ExpansionPanel defaultExpanded={true} disabled={books.length === 0} className={classes.expansionPanel}>
+						<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+							<Typography className={classes.heading}>
+								{`${shelf.title} (${books.length} ${books.length !== 1 ? ` books` : ` book`})`}
+							</Typography>
 							{checkedBooks.length > 0 && (
 								<div className="bookshelf-selected-books">
-									<span> {checkedBooks.length} selected books.</span>
-									<BookShelfSelector 
-										books={checkedBooks} 
-										shelves={shelves} 
-										shelf={shelf} 
-										handleShelfChange={onShelfChange} 
-										handleShelfMultipleChange={onShelfMultipleChange} 
+									<span> {checkedBooks.length} selected books</span>
+									<BookShelfSelector
+										books={checkedBooks}
+										shelves={shelves}
+										shelf={shelf}
+										handleShelfChange={onShelfChange}
+										handleShelfMultipleChange={onShelfMultipleChange}
 										cssClass="book-shelf-changer"
 									/>
 								</div>
 							)}
-							<div className="bookshelf-books">
-								<ol className="books-grid">
-									{books.map((book) => (
-										<Book 
-											key={book.id}
-											shelves={shelves}
-											shelf={shelf} 
-											book={book} 
-											handleShelfChange={onShelfChange}
-											onBookCheckedChange={onBookCheckedChange}
-											onBookRated={onBookRated}
-										/>
-									))}
-								</ol>
+						</ExpansionPanelSummary>
+						<ExpansionPanelDetails className={classes.expansionPanel}>
+							<div className="bookshelf">
+								<div className="bookshelf-books">
+									<ol className="books-grid">
+										{books.map((book) => (
+											<Book
+												key={book.id}
+												shelves={shelves}
+												shelf={shelf}
+												book={book}
+												handleShelfChange={onShelfChange}
+												onBookCheckedChange={onBookCheckedChange}
+												onBookRated={onBookRated}
+												isSearchPage={isSearchPage}
+											/>
+										))}
+									</ol>
+								</div>
 							</div>
-						</div>
-					</ExpansionPanelDetails>
-				</ExpansionPanel>
+						</ExpansionPanelDetails>
+					</ExpansionPanel>
+				)}
             </div>
         )
     }

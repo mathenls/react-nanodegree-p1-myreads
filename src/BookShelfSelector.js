@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-
 class BookShelfSelector extends Component {
     static propTypes = {
 		shelves: PropTypes.array.isRequired,
@@ -19,16 +18,22 @@ class BookShelfSelector extends Component {
     }
 
     render() {
-        const { shelves, shelf, cssClass, book, books } = this.props;
+        const { shelves, cssClass, book, books } = this.props;
 
         return (
             <div className={cssClass}>
-                <select value={shelf.type || 'none'} onChange={book ? (event) => this.handleChange(book, event) : (event) => this.handleChange(books, event)}>
+                <select
+                    value={(book && book.shelf) || (books.length && books[0].shelf)}
+                    onClick={(event) => {event.stopPropagation()}}
+                    onChange={book ? (event) => this.handleChange(book, event) : (event) => this.handleChange(books, event)}
+                >
                     <option value="move" disabled>Move to...</option>
-                    {shelves.map((shelf) => (
-                        <option key={shelf.type} value={shelf.type}>{shelf.title}</option>
-                    ))}
-                    <option value="none">None</option>
+                        {shelves.map((shelf) => (
+                            <option key={shelf.type} value={shelf.type}>
+                                {shelf.title}
+                            </option>
+                        ))}
+                    <option value='none'>None</option>
                 </select>
             </div>
         );
