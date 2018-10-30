@@ -18,6 +18,7 @@ I implemented two new features to the application:
 * @material-ui/core@3.2.2
 * @material-ui/icons@3.0.1
 * react-rating@1.4.1
+* font-awesome@4.7.0
 
 ## Setup
 
