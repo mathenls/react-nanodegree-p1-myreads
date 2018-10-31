@@ -61,21 +61,23 @@ class BooksApp extends Component {
 		errorMessage: ''
 	}
 
-	componentDidMount() {
-		BooksAPI.getAll()
-			.then((books) => {
-				books = books.map((book) => {
-					return {...book, rating: this.searchBookRating(book)};
-				});
-				this.setState({
-					books: books,
-					currentlyReading: books.filter(book => book.shelf === 'currentlyReading'),
-					wantToRead: books.filter(book => book.shelf === 'wantToRead'),
-					read: books.filter(book => book.shelf === 'read')
-				}, () => {
-					this.handleLoading(false);
-				});
-			});
+
+	async componentDidMount() {
+		let books = await BooksAPI.getAll();
+		books = books.map((book) => {
+			return {...book, rating: this.searchBookRating(book)};
+		});
+		const filter = books => bookShelf => books.filter(b => b.shelf === bookShelf);
+		const filterBy = filter(books);
+
+		this.setState({
+			books: books,
+			wantToRead: filterBy('wantToRead'),
+			currentlyReading: filterBy('currentlyReading'),
+			read: filterBy('read'),
+		}, () => {
+			this.handleLoading(false);
+		});
 	}
 
 	/**
@@ -98,16 +100,20 @@ class BooksApp extends Component {
 		this.setState((currentState) => ({
 			books: this.returnBooksFromShelves([...currentState.books], updatedBook, shelf)
 		}), () => {
-			this.setState((currentState) => ({
-				currentlyReading: currentState.books.filter(book => book.shelf === 'currentlyReading'),
-				wantToRead: currentState.books.filter(book => book.shelf === 'wantToRead'),
-				read: currentState.books.filter(book => book.shelf === 'read'),
-				//Here, I'm merging the books that are already in a shelf with the search results
-				searchResults: currentState.searchResults.map((searchedBook) => {
-					const bookOnShelf = currentState.books.find(book => book.id === searchedBook.id);
-					return bookOnShelf ? bookOnShelf : searchedBook;
-				})
-			}));
+			this.setState((currentState) => {
+				const filter = books => bookShelf => books.filter(b => b.shelf === bookShelf);
+				const filterBy = filter(currentState.books);
+				return {
+					wantToRead: filterBy('wantToRead'),
+					currentlyReading: filterBy('currentlyReading'),
+					read: filterBy('read'),
+					//Here, I'm merging the books that are already in a shelf with the search results
+					searchResults: currentState.searchResults.map((searchedBook) => {
+						const bookOnShelf = currentState.books.find(book => book.id === searchedBook.id);
+						return bookOnShelf ? bookOnShelf : searchedBook;
+					})
+				}
+			});
 		});
 		return BooksAPI.update(updatedBook, shelf); //Returns a promise for the book update request
 	}

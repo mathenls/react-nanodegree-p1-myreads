@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import BookShelfSelector from './BookShelfSelector';
 import Authors from './Authors';
@@ -50,7 +50,7 @@ const styles = theme => ({
     }
 });
 
-class Book extends Component {
+class Book extends PureComponent {
     state = {
         checked: this.props.book.checked
     }

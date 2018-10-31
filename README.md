@@ -3,6 +3,7 @@
 This is my first React practical project from Udacity's React Nanodegree program. It's basically an app
 that you can use to search books and organize them in shelves (Currently Reading, Want To Read, Read).
 I implemented two new features to the application:
+
 * You can move multiple books to a shelf
 * You can rate a book (1 to 5 stars) (The rating is stored in the browser's localStorage)
 
@@ -12,6 +13,7 @@ I implemented two new features to the application:
 * react-dom@16.3.2
 * react-rating@1.4.1
 * react-router-dom@4.3.1"
+* react-scripts@2.1.0
 
 ## External Libraries Used
 
@@ -19,6 +21,7 @@ I implemented two new features to the application:
 * @material-ui/icons@3.0.1
 * react-rating@1.4.1
 * font-awesome@4.7.0
+* react-debounce-input@3.2.0
 
 ## Setup
 

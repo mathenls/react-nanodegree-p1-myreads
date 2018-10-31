@@ -8,6 +8,7 @@ import ArrowBack from '@material-ui/icons/ArrowBack';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import InputBase from '@material-ui/core/InputBase';
+import { DebounceInput } from 'react-debounce-input';
 
 const styles = theme => ({
     root: {
@@ -99,12 +100,14 @@ class SearchBar extends Component {
                             <div className={classes.searchIcon}>
                                 <SearchIcon />
                             </div>
-                            <InputBase
+                            <DebounceInput
                                 placeholder="Search by title or author"
+                                debounceTimeout={500}
                                 classes={{
                                     root: classes.inputRoot,
                                     input: classes.inputInput,
                                 }}
+                                element={InputBase}
                                 value={query}
                                 onChange={(event) => this.updateQuery(event.target.value)}
                             />
